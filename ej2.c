@@ -33,6 +33,26 @@ void *cargarTareas(tarea ** tareas, int cant) {
     }
 }
 
+nodo * crearNodo() {	
+	nodo * NuevoNodo =	(nodo*)malloc(sizeof(nodo));	
+	NuevoNodo->sig = NULL;
+	return NuevoNodo;
+}
+
+void cargarTareasTerminadas(nodo ** lista, tarea * tarea) {
+    nodo * nuevoNodo = crearNodo();
+    nuevoNodo->tareas = (*tarea);
+    nodo * aux = *lista;
+    if (aux != NULL) {
+        while (aux->sig != NULL) {
+            aux = aux->sig;
+        }
+        aux->sig = nuevoNodo;
+    } else {
+        *lista = nuevoNodo;
+    }
+}
+
 void categorizarTareas(tarea ** tareas, int cant) {
     nodo * start1 = listaVacia();
     nodo * start2 = listaVacia();
@@ -44,35 +64,35 @@ void categorizarTareas(tarea ** tareas, int cant) {
         printf("- Descripcion de la tarea: %s -\n", tareas[j]->descripcion);
         puts("|-------------------------|\n");
         char completada;
-        printf("Considera la tarea N %d como terminada? Use S/N\n", j+1);
+        printf("Considera la tarea N %d como terminada? S/N\n", j+1);
         fflush(stdin);
         scanf("%c", &completada);
-        completada = toupper(completada); // Transforma a mayúscula el carácter ingresado.
+        completada = toupper(completada);
         while (completada != 'S' && completada != 'N') {
             printf("Caracter no reconocido: %c ...\n", completada);
             puts("Intente nuevamente.");
             printf("Considera la tarea N %d como terminada? S/N\n", j+1);
             fflush(stdin);
             scanf("%c", &completada);
+            completada = toupper(completada);
         }
-        if (completada = 'S') {
-            cargarTareasTerminadas(start1, tareas[j]);
-        } else if (completada = 'N') {
+        if (completada == 'S') {
+            cargarTareasTerminadas(&start1, tareas[j]);
+        } else if (completada == 'N') {
             /* cargarTareasPendientes(tareas[j]); */
         }
     }
-}
-
-void cargarTareasTerminadas(nodo * start, tarea * tarea) {
-    nodo * nuevoNodo = crearNodo();
-    start->sig = nuevoNodo;
-    nuevoNodo->tareas = (*tarea);
-}
-
-nodo * CrearNodo() {	
-	nodo * NuevoNodo =	(nodo*)malloc(sizeof(nodo));	
-	NuevoNodo->sig = NULL;
-	return NuevoNodo;
+    // Recorrer la lista enlazada (solo para practicar xd) (Funciona)
+/*     if (start1 != NULL) {
+        nodo * aux = start1;
+        while (aux->sig != NULL) {
+            printf("Este el nodo con ID de tarea: %d\n", aux->tareas.tareaID);
+            aux = aux->sig;
+            if (aux->sig == NULL) {
+                printf("Este es el ultimo nodo con ID de tarea: %d\n", aux->tareas.tareaID);
+            }
+        }
+    } */
 }
 
 int main() {
